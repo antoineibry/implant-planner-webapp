@@ -1,12 +1,335 @@
 /* Implant catalogue data - generated from implant-catalogue.xlsx
-   Do not hand-edit. Update the Excel file, then use the
-   "Update catalogue" button on the Implant Planner page. */
+   This is only the copy used when the Excel file cannot be read
+   (for example when index.html is opened straight from disk).
+   The app reads the workbook itself whenever it is served over http. */
 window.IMPLANT_DATA = {
   "version": "1.0",
   "source": "implant-catalogue.xlsx",
   "generated": "2026-08-30",
-  "entryCount": 231,
+  "entryCount": 322,
   "models": [
+    {
+      "brand": "Biohorizons",
+      "model": "Tapered Pro",
+      "sizes": [
+        [
+          3.8,
+          9
+        ],
+        [
+          3.8,
+          10.5
+        ],
+        [
+          3.8,
+          12
+        ],
+        [
+          3.8,
+          15
+        ],
+        [
+          3.8,
+          18
+        ],
+        [
+          4.2,
+          9
+        ],
+        [
+          4.2,
+          10.5
+        ],
+        [
+          4.2,
+          12
+        ],
+        [
+          4.2,
+          15
+        ],
+        [
+          4.2,
+          18
+        ],
+        [
+          4.6,
+          9
+        ],
+        [
+          4.6,
+          10.5
+        ],
+        [
+          4.6,
+          12
+        ],
+        [
+          4.6,
+          15
+        ],
+        [
+          4.6,
+          18
+        ],
+        [
+          5.2,
+          9
+        ],
+        [
+          5.2,
+          10.5
+        ],
+        [
+          5.2,
+          12
+        ],
+        [
+          5.2,
+          15
+        ],
+        [
+          5.2,
+          18
+        ]
+      ]
+    },
+    {
+      "brand": "Biohorizons",
+      "model": "Tapered Pro Conical",
+      "sizes": [
+        [
+          3.3,
+          9
+        ],
+        [
+          3.3,
+          10.5
+        ],
+        [
+          3.3,
+          12
+        ],
+        [
+          3.3,
+          15
+        ],
+        [
+          3.3,
+          18
+        ],
+        [
+          3.8,
+          9
+        ],
+        [
+          3.8,
+          10.5
+        ],
+        [
+          3.8,
+          12
+        ],
+        [
+          3.8,
+          15
+        ],
+        [
+          3.8,
+          18
+        ],
+        [
+          4.2,
+          9
+        ],
+        [
+          4.2,
+          10.5
+        ],
+        [
+          4.2,
+          12
+        ],
+        [
+          4.2,
+          15
+        ],
+        [
+          4.2,
+          18
+        ],
+        [
+          4.6,
+          9
+        ],
+        [
+          4.6,
+          10.5
+        ],
+        [
+          4.6,
+          12
+        ],
+        [
+          4.6,
+          15
+        ],
+        [
+          4.6,
+          18
+        ],
+        [
+          5.2,
+          9
+        ],
+        [
+          5.2,
+          10.5
+        ],
+        [
+          5.2,
+          12
+        ],
+        [
+          5.2,
+          15
+        ],
+        [
+          5.2,
+          18
+        ]
+      ]
+    },
+    {
+      "brand": "JD Evolution",
+      "model": "JDEvolution Plus",
+      "sizes": [
+        [
+          3.7,
+          8
+        ],
+        [
+          3.7,
+          10
+        ],
+        [
+          3.7,
+          11.5
+        ],
+        [
+          3.7,
+          13
+        ],
+        [
+          3.7,
+          15
+        ],
+        [
+          3.7,
+          18
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          4,
+          10
+        ],
+        [
+          4,
+          11.5
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          4.3,
+          6
+        ],
+        [
+          4.3,
+          8
+        ],
+        [
+          4.3,
+          10
+        ],
+        [
+          4.3,
+          11.5
+        ],
+        [
+          4.3,
+          13
+        ],
+        [
+          4.3,
+          15
+        ],
+        [
+          4.3,
+          18
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          11.5
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          5,
+          18
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11.5
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          6,
+          15
+        ]
+      ]
+    },
     {
       "brand": "MegaGen",
       "model": "AnyRidge",
@@ -400,6 +723,72 @@ window.IMPLANT_DATA = {
       ]
     },
     {
+      "brand": "Nobel Biocare",
+      "model": "NobelReplace Conical Connection",
+      "sizes": [
+        [
+          3.5,
+          8
+        ],
+        [
+          3.5,
+          10
+        ],
+        [
+          3.5,
+          11.5
+        ],
+        [
+          3.5,
+          13
+        ],
+        [
+          3.5,
+          15
+        ],
+        [
+          4.3,
+          8
+        ],
+        [
+          4.3,
+          10
+        ],
+        [
+          4.3,
+          11.5
+        ],
+        [
+          4.3,
+          13
+        ],
+        [
+          4.3,
+          15
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          11.5
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          5,
+          15
+        ]
+      ]
+    },
+    {
       "brand": "Omnitaper",
       "model": "OmniTaper EV",
       "sizes": [
@@ -645,7 +1034,7 @@ window.IMPLANT_DATA = {
     },
     {
       "brand": "Straumann",
-      "model": "Standard RN",
+      "model": "Bone Level NC",
       "sizes": [
         [
           3.3,
@@ -662,15 +1051,13 @@ window.IMPLANT_DATA = {
         [
           3.3,
           14
-        ],
-        [
-          3.3,
-          16
-        ],
-        [
-          4.1,
-          6
-        ],
+        ]
+      ]
+    },
+    {
+      "brand": "Straumann",
+      "model": "Bone Level RC",
+      "sizes": [
         [
           4.1,
           8
@@ -686,14 +1073,6 @@ window.IMPLANT_DATA = {
         [
           4.1,
           14
-        ],
-        [
-          4.1,
-          16
-        ],
-        [
-          4.8,
-          6
         ],
         [
           4.8,
@@ -715,11 +1094,61 @@ window.IMPLANT_DATA = {
     },
     {
       "brand": "Straumann",
-      "model": "Standard WN",
+      "model": "Bone Level Tapered NC",
       "sizes": [
         [
-          4.8,
-          6
+          3.3,
+          8
+        ],
+        [
+          3.3,
+          10
+        ],
+        [
+          3.3,
+          12
+        ],
+        [
+          3.3,
+          14
+        ],
+        [
+          3.3,
+          16
+        ],
+        [
+          3.3,
+          18
+        ]
+      ]
+    },
+    {
+      "brand": "Straumann",
+      "model": "Bone Level Tapered RC",
+      "sizes": [
+        [
+          4.1,
+          8
+        ],
+        [
+          4.1,
+          10
+        ],
+        [
+          4.1,
+          12
+        ],
+        [
+          4.1,
+          14
+        ],
+        [
+          4.1,
+          16
+        ],
+        [
+          4.1,
+          18
         ],
         [
           4.8,
@@ -732,6 +1161,36 @@ window.IMPLANT_DATA = {
         [
           4.8,
           12
+        ],
+        [
+          4.8,
+          14
+        ],
+        [
+          4.8,
+          16
+        ],
+        [
+          4.8,
+          18
+        ]
+      ]
+    },
+    {
+      "brand": "Straumann",
+      "model": "Bone Level Tapered SC",
+      "sizes": [
+        [
+          2.9,
+          10
+        ],
+        [
+          2.9,
+          12
+        ],
+        [
+          2.9,
+          14
         ]
       ]
     },
@@ -855,85 +1314,7 @@ window.IMPLANT_DATA = {
     },
     {
       "brand": "Straumann",
-      "model": "Bone Level NC",
-      "sizes": [
-        [
-          3.3,
-          8
-        ],
-        [
-          3.3,
-          10
-        ],
-        [
-          3.3,
-          12
-        ],
-        [
-          3.3,
-          14
-        ]
-      ]
-    },
-    {
-      "brand": "Straumann",
-      "model": "Bone Level RC",
-      "sizes": [
-        [
-          4.1,
-          8
-        ],
-        [
-          4.1,
-          10
-        ],
-        [
-          4.1,
-          12
-        ],
-        [
-          4.1,
-          14
-        ],
-        [
-          4.8,
-          8
-        ],
-        [
-          4.8,
-          10
-        ],
-        [
-          4.8,
-          12
-        ],
-        [
-          4.8,
-          14
-        ]
-      ]
-    },
-    {
-      "brand": "Straumann",
-      "model": "Bone Level Tapered SC",
-      "sizes": [
-        [
-          2.9,
-          10
-        ],
-        [
-          2.9,
-          12
-        ],
-        [
-          2.9,
-          14
-        ]
-      ]
-    },
-    {
-      "brand": "Straumann",
-      "model": "Bone Level Tapered NC",
+      "model": "Standard RN",
       "sizes": [
         [
           3.3,
@@ -956,38 +1337,58 @@ window.IMPLANT_DATA = {
           16
         ],
         [
-          3.3,
-          18
+          4.1,
+          6
+        ],
+        [
+          4.1,
+          8
+        ],
+        [
+          4.1,
+          10
+        ],
+        [
+          4.1,
+          12
+        ],
+        [
+          4.1,
+          14
+        ],
+        [
+          4.1,
+          16
+        ],
+        [
+          4.8,
+          6
+        ],
+        [
+          4.8,
+          8
+        ],
+        [
+          4.8,
+          10
+        ],
+        [
+          4.8,
+          12
+        ],
+        [
+          4.8,
+          14
         ]
       ]
     },
     {
       "brand": "Straumann",
-      "model": "Bone Level Tapered RC",
+      "model": "Standard WN",
       "sizes": [
         [
-          4.1,
-          8
-        ],
-        [
-          4.1,
-          10
-        ],
-        [
-          4.1,
-          12
-        ],
-        [
-          4.1,
-          14
-        ],
-        [
-          4.1,
-          16
-        ],
-        [
-          4.1,
-          18
+          4.8,
+          6
         ],
         [
           4.8,
@@ -1000,18 +1401,6 @@ window.IMPLANT_DATA = {
         [
           4.8,
           12
-        ],
-        [
-          4.8,
-          14
-        ],
-        [
-          4.8,
-          16
-        ],
-        [
-          4.8,
-          18
         ]
       ]
     }

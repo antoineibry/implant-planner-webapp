@@ -1,6 +1,7 @@
 /* Implant class data - generated from brand-classes.xlsx
-   Do not hand-edit. Update the Excel file, then use the
-   "Update catalogue" button on the Implant Planner page.
+   This is only the copy used when the Excel file cannot be read
+   (for example when index.html is opened straight from disk).
+   The app reads the workbook itself whenever it is served over http.
    A rule with the model "All models" applies to every model of that brand. */
 window.CLASS_DATA = {
   "version": "1.0",
@@ -24,6 +25,21 @@ window.CLASS_DATA = {
     },
     {
       "brand": "Straumann",
+      "model": "All models",
+      "class": "A"
+    },
+    {
+      "brand": "JD Evolution",
+      "model": "All models",
+      "class": "B"
+    },
+    {
+      "brand": "Biohorizons",
+      "model": "All models",
+      "class": "B"
+    },
+    {
+      "brand": "Nobel Biocare",
       "model": "All models",
       "class": "A"
     }

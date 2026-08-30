@@ -290,197 +290,52 @@
     renderGroups(results);
   }
 
-  /* ----------------------------------------------------- catalogue updates */
+  /* ------------------------------------------------------- data in use */
 
-  var dialog = document.getElementById('data-dialog');
-  var statusBox = document.getElementById('data-status');
-  var messageBox = document.getElementById('data-message');
-  var summaryBox = document.getElementById('data-summary');
-  var dropZone = document.getElementById('drop-zone');
-  var fileInput = document.getElementById('file-input');
+  var sourceBox = document.getElementById('data-source');
 
-  function formatDate(iso) {
-    if (!iso) return '';
-    var date = new Date(iso);
-    if (isNaN(date.getTime())) return '';
-    return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  function renderStatus() {
+  /* One line saying which copy of the data is on screen: the Excel files
+     themselves, or the copy in data/ when they cannot be read. */
+  function renderSource() {
+    var status = App.status();
     var data = App.data();
-    statusBox.innerHTML = '';
+    var parts = [status.catalogue, status.classes];
+    var failed = parts.filter(function (part) { return !part.live; });
 
-    var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    icon.setAttribute('viewBox', '0 0 24 24');
-    icon.setAttribute('fill', 'none');
-    icon.setAttribute('stroke', 'currentColor');
-    icon.setAttribute('stroke-width', '1.8');
-    icon.setAttribute('stroke-linecap', 'round');
-    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M12 8h.01M11 12h1v4h1');
-    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', '12'); circle.setAttribute('cy', '12'); circle.setAttribute('r', '9');
-    icon.appendChild(circle); icon.appendChild(path);
-    statusBox.appendChild(icon);
+    var summary = data.entryCount + ' implant sizes · ' + data.models.length + ' models · ' +
+      App.classes().length + ' classes';
 
-    var text = element('div');
-    text.appendChild(element('strong', null, data.entryCount + ' implant sizes'));
-    text.appendChild(document.createTextNode(
-      ' across ' + data.models.length + ' models. Source: ' + App.sourceName() +
-      (App.isCustom() ? ' (uploaded ' + formatDate(App.importedAt()) + ')' : ' (built in)') + '.'));
+    sourceBox.innerHTML = '';
+    sourceBox.className = 'data-source';
+    sourceBox.appendChild(element('span', null, summary));
 
-    var classes = App.classes();
-    text.appendChild(element('br'));
-    text.appendChild(element('strong', null, classes.length + (classes.length === 1 ? ' class' : ' classes')));
-    text.appendChild(document.createTextNode(
-      ' (' + classes.join(', ') + '). Source: ' + App.classSourceName() +
-      (App.isCustomClasses() ? ' (uploaded ' + formatDate(App.classesImportedAt()) + ')' : ' (built in)') + '.'));
-    statusBox.appendChild(text);
-
-    var updated = App.importedAt() || App.classesImportedAt();
-    summaryBox.textContent = data.entryCount + ' sizes · ' + classes.length +
-      (classes.length === 1 ? ' class' : ' classes') +
-      (updated ? ' · updated ' + formatDate(updated) : '');
-  }
-
-  function showMessage(kind, text) {
-    messageBox.innerHTML = '';
-    messageBox.appendChild(element('div', 'message message--' + kind, text));
-  }
-
-  function loadFile(file) {
-    if (!file) return;
-    if (!/\.xlsx$/i.test(file.name)) {
-      showMessage('error', 'Please choose an .xlsx file. Older .xls files can be saved as .xlsx from Excel.');
+    if (!failed.length) {
+      sourceBox.appendChild(element('span', 'data-source__file',
+        'read from ' + status.catalogue.file + ' and ' + status.classes.file));
       return;
     }
 
-    showMessage('ok', 'Reading ' + file.name + '…');
+    sourceBox.className = 'data-source data-source--warn';
 
-    file.arrayBuffer()
-      .then(function (buffer) { return window.XlsxReader.readRows(buffer); })
-      .then(function (rows) {
-        var kind = App.sheetKind(rows);
-        var message;
+    var offline = failed.every(function (part) {
+      return part.error && part.error.message === 'OFFLINE';
+    });
 
-        if (kind === 'classes') {
-          var classData = App.buildClassesFromRows(rows, file.name);
-          App.useClasses(classData, file.name);
-          message = 'Classes updated: ' + classData.rules.length +
-            (classData.rules.length === 1 ? ' rule' : ' rules') + ', covering ' +
-            App.classes().join(', ') + '.';
-        } else if (kind === 'catalogue') {
-          var data = App.buildFromRows(rows, file.name);
-          App.use(data, file.name);
-          message = 'Catalogue updated: ' + data.entryCount + ' implant sizes across ' +
-            data.models.length + ' models.';
-        } else {
-          throw new Error('That sheet was not recognised. The implant catalogue needs Brand Name, ' +
-            'Model, Diameter and Length columns; the class list needs Brand Name, Model and Class.');
-        }
-
-        renderStatus();
-        renderFilters();
-        run();
-        showMessage('ok', message +
-          ' This browser will keep using it until you restore the built-in data.');
-      })
-      .catch(function (error) {
-        showMessage('error', error && error.message ? error.message : 'The file could not be read.');
-      });
+    sourceBox.appendChild(element('span', 'data-source__file', offline
+      ? 'The spreadsheets cannot be read when the page is opened straight from disk, so this is the ' +
+        'built-in copy from ' + (App.generatedOn() || 'the last update') + '. Open the site through a ' +
+        'web server to read them directly.'
+      : failed.map(function (part) {
+          return part.file + ': ' + (part.error ? part.error.message : 'could not be read') +
+            ' Showing the built-in copy from ' + (App.generatedOn() || 'the last update') + '.';
+        }).join(' ')));
   }
-
-  document.getElementById('open-data-dialog').addEventListener('click', function () {
-    messageBox.innerHTML = '';
-    renderStatus();
-    if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
-  });
-
-  document.getElementById('close-data-dialog').addEventListener('click', function () {
-    if (typeof dialog.close === 'function') dialog.close(); else dialog.removeAttribute('open');
-  });
-
-  dropZone.addEventListener('click', function () { fileInput.click(); });
-  dropZone.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); fileInput.click(); }
-  });
-
-  fileInput.addEventListener('change', function () {
-    loadFile(fileInput.files[0]);
-    fileInput.value = '';
-  });
-
-  ['dragenter', 'dragover'].forEach(function (name) {
-    dropZone.addEventListener(name, function (event) {
-      event.preventDefault();
-      dropZone.classList.add('is-over');
-    });
-  });
-
-  ['dragleave', 'drop'].forEach(function (name) {
-    dropZone.addEventListener(name, function (event) {
-      event.preventDefault();
-      dropZone.classList.remove('is-over');
-    });
-  });
-
-  dropZone.addEventListener('drop', function (event) {
-    if (event.dataTransfer && event.dataTransfer.files.length) loadFile(event.dataTransfer.files[0]);
-  });
-
-  document.getElementById('reset-data').addEventListener('click', function () {
-    App.reset();
-    renderStatus();
-    renderFilters();
-    run();
-    showMessage('ok', 'The built-in catalogue is in use again.');
-  });
-
-  /* Writes the data the app is using back out as the file the site loads,
-     so an upload can be made permanent by replacing one file. */
-  function downloadData(kind) {
-    var content;
-    var name;
-
-    if (kind === 'classes') {
-      name = 'classes.js';
-      content = '/* Implant class data - generated from ' + App.classSourceName() + '\n' +
-        '   Do not hand-edit. Update the Excel file, then use the\n' +
-        '   "Update catalogue" button on the Implant Planner page.\n' +
-        '   A rule with the model "All models" applies to every model of that brand. */\n' +
-        'window.CLASS_DATA = ' + JSON.stringify(App.classData(), null, 2) + ';\n';
-    } else {
-      name = 'implants.js';
-      content = '/* Implant catalogue data - generated from ' + App.sourceName() + '\n' +
-        '   Do not hand-edit. Update the Excel file, then use the\n' +
-        '   "Update catalogue" button on the Implant Planner page. */\n' +
-        'window.IMPLANT_DATA = ' + JSON.stringify(App.data(), null, 2) + ';\n';
-    }
-
-    var url = URL.createObjectURL(new Blob([content], { type: 'text/javascript' }));
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-
-    showMessage('ok', 'Saved ' + name + '. Put it in the website’s data folder, replacing the old file, ' +
-      'to make this the default for everyone.');
-  }
-
-  document.querySelectorAll('[data-download]').forEach(function (button) {
-    button.addEventListener('click', function () {
-      downloadData(button.getAttribute('data-download'));
-    });
-  });
 
   /* ------------------------------------------------------------------ init */
 
   App.initTheme();
   renderFilters();
-  renderStatus();
+  renderSource();
 
   [diameterInput, lengthInput].forEach(function (input) {
     input.addEventListener('input', run);
@@ -518,4 +373,12 @@
   } catch (error) { /* ignore */ }
 
   run();
+
+  /* The Excel files land a moment after the page does; take them as soon as
+     they arrive and redraw with the real data. */
+  App.load().then(function () {
+    renderFilters();
+    renderSource();
+    run();
+  });
 })();

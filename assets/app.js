@@ -3,8 +3,8 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'perio.catalogue';
-  var CLASS_STORAGE_KEY = 'perio.classes';
+  var CATALOGUE_FILE = 'implant-catalogue.xlsx';
+  var CLASS_FILE = 'brand-classes.xlsx';
   var THEME_KEY = 'perio.theme';
   var UNCLASSIFIED = 'Unclassified';
 
@@ -88,17 +88,6 @@
       if (typeof labels[i] === 'string' && pattern.test(labels[i])) return i;
     }
     return fallback;
-  }
-
-  /* Which of the two workbooks is this? */
-  function sheetKind(rows) {
-    var header = findHeader(rows);
-    if (!header) return null;
-    var labels = header.labels.filter(function (label) { return typeof label === 'string'; });
-    var joined = labels.join(' | ');
-    if (/class/i.test(joined)) return 'classes';
-    if (/diameter/i.test(joined) && /length/i.test(joined)) return 'catalogue';
-    return null;
   }
 
   function text(value) {
@@ -251,30 +240,35 @@
 
   /* ------------------------------------------------------- catalogue in use */
 
-  function readStored() {
-    try {
-      var raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-      var parsed = JSON.parse(raw);
-      if (parsed && parsed.data && parsed.data.models && parsed.data.models.length) return parsed;
-    } catch (error) { /* corrupt or unavailable storage falls back to built-in */ }
-    return null;
-  }
+  /* The pages start from the copies in data/, then read the two Excel files
+     next to them and switch to those. Editing a workbook and reloading the
+     page is therefore the whole update. */
+  var current = window.IMPLANT_DATA || { models: [], entryCount: 0 };
+  var currentClasses = window.CLASS_DATA || { rules: [] };
 
-  function readStoredClasses() {
-    try {
-      var raw = window.localStorage.getItem(CLASS_STORAGE_KEY);
-      if (!raw) return null;
-      var parsed = JSON.parse(raw);
-      if (parsed && parsed.data && parsed.data.rules && parsed.data.rules.length) return parsed;
-    } catch (error) { /* corrupt or unavailable storage falls back to built-in */ }
-    return null;
-  }
+  var status = {
+    catalogue: { file: CATALOGUE_FILE, live: false, error: null },
+    classes: { file: CLASS_FILE, live: false, error: null }
+  };
 
-  var stored = readStored();
-  var current = stored ? stored.data : (window.IMPLANT_DATA || { models: [], entryCount: 0 });
-  var storedClasses = readStoredClasses();
-  var currentClasses = storedClasses ? storedClasses.data : (window.CLASS_DATA || { rules: [] });
+  /* A workbook opened straight from disk (file://) cannot be fetched; that is
+     the one case where the copies in data/ are all the page has. */
+  function fetchRows(name) {
+    if (typeof fetch !== 'function' || window.location.protocol === 'file:') {
+      return Promise.reject(new Error('OFFLINE'));
+    }
+
+    return fetch(name, { cache: 'no-store' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('not found next to the web page (' + response.status + ').');
+        return response.arrayBuffer();
+      })
+      .catch(function (error) {
+        if (error instanceof TypeError) throw new Error('OFFLINE');
+        throw error;
+      })
+      .then(function (buffer) { return window.XlsxReader.readRows(buffer); });
+  }
 
   /* Every model carries its class, so the planner and the catalogue page
      never have to resolve the rules themselves. */
@@ -294,49 +288,44 @@
     cataloguePath: cataloguePath,
     buildFromRows: buildFromRows,
     buildClassesFromRows: buildClassesFromRows,
-    sheetKind: sheetKind,
     UNCLASSIFIED: UNCLASSIFIED,
 
     data: function () { return current; },
-    isCustom: function () { return !!stored; },
-    importedAt: function () { return stored ? stored.importedAt : null; },
-    sourceName: function () { return stored ? stored.fileName : (current.source || 'implant-catalogue.xlsx'); },
-
     classData: function () { return currentClasses; },
-    isCustomClasses: function () { return !!storedClasses; },
-    classesImportedAt: function () { return storedClasses ? storedClasses.importedAt : null; },
-    classSourceName: function () {
-      return storedClasses ? storedClasses.fileName : (currentClasses.source || 'brand-classes.xlsx');
-    },
+    status: function () { return status; },
+    generatedOn: function () { return (window.IMPLANT_DATA || {}).generated || null; },
 
-    use: function (data, fileName) {
-      current = data;
-      stored = { data: data, fileName: fileName, importedAt: new Date().toISOString() };
-      applyClasses();
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-      } catch (error) { /* private browsing: the update still applies for this visit */ }
-    },
+    /* Reads both workbooks and switches to them. Whichever one is readable is
+       used; the other keeps the copy from data/. Resolves once both have been
+       tried, so a page can render immediately and refresh when this settles. */
+    load: function () {
+      var loadCatalogue = fetchRows(CATALOGUE_FILE)
+        .then(function (rows) {
+          var data = buildFromRows(rows, CATALOGUE_FILE);
+          current = data;
+          status.catalogue.live = true;
+          status.catalogue.error = null;
+        })
+        .catch(function (error) {
+          status.catalogue.live = false;
+          status.catalogue.error = error;
+        });
 
-    useClasses: function (data, fileName) {
-      currentClasses = data;
-      storedClasses = { data: data, fileName: fileName, importedAt: new Date().toISOString() };
-      applyClasses();
-      try {
-        window.localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(storedClasses));
-      } catch (error) { /* private browsing: the update still applies for this visit */ }
-    },
+      var loadClasses = fetchRows(CLASS_FILE)
+        .then(function (rows) {
+          currentClasses = buildClassesFromRows(rows, CLASS_FILE);
+          status.classes.live = true;
+          status.classes.error = null;
+        })
+        .catch(function (error) {
+          status.classes.live = false;
+          status.classes.error = error;
+        });
 
-    reset: function () {
-      stored = null;
-      current = window.IMPLANT_DATA || { models: [], entryCount: 0 };
-      storedClasses = null;
-      currentClasses = window.CLASS_DATA || { rules: [] };
-      applyClasses();
-      try {
-        window.localStorage.removeItem(STORAGE_KEY);
-        window.localStorage.removeItem(CLASS_STORAGE_KEY);
-      } catch (error) { /* ignore */ }
+      return Promise.all([loadCatalogue, loadClasses]).then(function () {
+        applyClasses();
+        return status;
+      });
     },
 
     brands: function () {

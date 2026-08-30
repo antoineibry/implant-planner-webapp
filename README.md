@@ -52,28 +52,34 @@ A row whose model is `All models` (or blank, or `*`) applies to every model of t
 naming one model overrides its brand's row for that model. A model no row covers is listed as
 `Unclassified` and still appears in results — it is simply grouped under that label in the filter.
 
-`data/implants.js` and `data/classes.js` are the copies the web app actually reads — the same data,
-grouped so the browser can load it instantly. They currently hold 231 implant sizes across 14
-models, in classes A and B.
+The app reads these two workbooks itself, every time a page loads. They currently hold 322 implant
+sizes across 18 models in classes A and B.
 
 ### Updating the data
 
 1. Edit `implant-catalogue.xlsx` or `brand-classes.xlsx` in Excel and save it.
-2. Open the Implant Planner and press **Update catalogue**.
-3. Choose the Excel file (or drop it on the panel).
+2. Reload the Implant Planner (F5).
 
-Either workbook is accepted: the planner recognises which one it is from the column headers and
-replaces only that part of the data. It reads the workbook in the browser and starts using it
-immediately. The file is checked first: if a row is missing a brand, a model, a class or a number,
-nothing is replaced and the message names the spreadsheet row to fix.
+That is the whole procedure. There is no import step and no button. Under the results heading a
+line always states what is on screen — the number of sizes, models and classes, and which files
+they were read from — so you can confirm an edit landed at a glance.
 
-That update lives in the browser that made it. To make it the default **for everyone**:
+If a row is missing a brand, a model, a class or a number, the sheet is rejected and that line
+turns amber naming the spreadsheet row to fix, while the app keeps working on the last good copy.
 
-4. In the same dialog, press **implants.js** or **classes.js** under Download.
-5. Put the downloaded file into the website's `data` folder, replacing the old one, and re-upload
-   the site.
+When the site is hosted, updating means replacing the `.xlsx` on the host the same way you would
+replace any other file; the next page load picks it up.
 
-**Restore built-in data** discards a browser's uploaded copies and returns to the files in `data`.
+### The copies in `data/`
+
+`data/implants.js` and `data/classes.js` hold a copy of both workbooks, and are used **only** when
+the Excel files cannot be read — which happens when `index.html` is opened straight from disk
+(`file://`), because browsers do not let a local page read neighbouring files. In that case the app
+still works and says which copy it is showing, and how old it is.
+
+If the site is served over http — a local `python -m http.server`, or any host — these files are
+never used and can be ignored. They are regenerated from the workbooks whenever the project is
+updated.
 
 ## Adding a catalogue PDF
 
@@ -84,11 +90,18 @@ Any model with no catalogue on file is named at the bottom of the Catalogs page.
 
 ## Hosting
 
-Upload the whole folder to any static host — Netlify (drag the folder onto app.netlify.com/drop),
-GitHub Pages, Vercel or a department web server. `index.html` is the entry point. Nothing else has
-to be installed or configured.
+Upload the whole folder — spreadsheets included — to any static host: Netlify (drag the folder onto
+app.netlify.com/drop), GitHub Pages, Vercel or a department web server. `index.html` is the entry
+point. Nothing else has to be installed or configured.
 
-Reading an uploaded `.xlsx` uses the browser's built-in decompression, which needs Chrome, Edge,
+To run it locally, serve the folder rather than double-clicking `index.html`, so the app can read
+the workbooks:
+
+    python -m http.server 5173
+
+then open http://localhost:5173.
+
+Reading the `.xlsx` files uses the browser's built-in decompression, which needs Chrome, Edge,
 Firefox or Safari from 2023 or later. Everything else in the app works in any modern browser.
 
 ## Files
@@ -99,10 +112,10 @@ Firefox or Safari from 2023 or later. Everything else in the app works in any mo
     assets/app.js           Catalogue storage, the matching rules, catalogue-to-PDF mapping
     assets/planner.js       Implant Planner page behaviour
     assets/catalogs.js      Catalogs page behaviour
-    assets/xlsx.js          Reads .xlsx files in the browser, no external library
-    data/implants.js        The catalogue the app reads
-    data/classes.js         The class of each brand or model
-    implant-catalogue.xlsx  The master catalogue spreadsheet
-    brand-classes.xlsx      The master class spreadsheet
+    assets/xlsx.js          Reads the .xlsx files in the browser, no external library
+    data/implants.js        Fallback copy of the catalogue, for file:// use
+    data/classes.js         Fallback copy of the classes, for file:// use
+    implant-catalogue.xlsx  The catalogue the app reads
+    brand-classes.xlsx      The classes the app reads
     Catalogues/             Manufacturer catalogue PDFs
 "# implant-planner-webapp" 

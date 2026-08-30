@@ -578,7 +578,6 @@ a { color: var(--brand); }
   white-space: nowrap;
 }
 
-.dialog__downloads { display: flex; gap: 8px; flex-wrap: wrap; }
 .cell-model { color: var(--text-2); font-size: 13.5px; }
 
 .dim {
@@ -713,80 +712,29 @@ a { color: var(--brand); }
 .rule-table td:last-child { text-align: right; }
 .rule-table .formula { font-family: var(--mono); font-size: 12.5px; color: var(--text-2); }
 
-/* ------------------------------------------------------------ data manager */
+/* ------------------------------------------------------------ data source */
 
-.data-status {
+.data-source {
   display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 12.5px;
-  color: var(--text-2);
-  padding: 10px 12px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  margin-bottom: 14px;
-}
-
-.data-status svg { width: 15px; height: 15px; flex: none; color: var(--text-3); }
-.data-status strong { color: var(--text); font-weight: 600; }
-
-.drop-zone {
-  border: 1.5px dashed var(--border-strong);
-  border-radius: var(--radius);
-  padding: 22px 18px;
-  text-align: center;
-  background: var(--surface-2);
-  cursor: pointer;
-}
-
-.drop-zone:hover, .drop-zone.is-over { border-color: var(--brand); background: var(--brand-soft); }
-.drop-zone svg { width: 26px; height: 26px; color: var(--text-3); margin-bottom: 8px; }
-.drop-zone strong { display: block; font-size: 13.5px; }
-.drop-zone span { display: block; font-size: 12px; color: var(--text-3); margin-top: 3px; }
-
-.message {
-  margin-top: 14px;
-  padding: 11px 13px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  border: 1px solid transparent;
-}
-
-.message--ok { background: var(--optimal-soft); border-color: var(--optimal-border); color: var(--optimal); }
-.message--error { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
-
-.dialog {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0;
-  max-width: 560px;
-  width: calc(100% - 32px);
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: var(--shadow);
-}
-
-.dialog::backdrop { background: rgba(9, 17, 24, .5); }
-.dialog__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 15px 18px;
-  border-bottom: 1px solid var(--border);
-}
-.dialog__head h2 { font-size: 15px; }
-.dialog__body { padding: 18px; }
-.dialog__foot {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 13px 18px;
-  border-top: 1px solid var(--border);
-  background: var(--surface-2);
   flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: -6px 0 14px;
+  font-size: 12px;
+  color: var(--text-3);
 }
+
+.data-source__file { font-family: var(--mono); font-size: 11.5px; }
+
+.data-source--warn {
+  padding: 8px 11px;
+  border: 1px solid var(--less-border);
+  background: var(--less-soft);
+  border-radius: var(--radius-sm);
+  color: var(--less);
+}
+
+.data-source--warn .data-source__file { color: inherit; font-family: var(--sans); font-size: 12px; }
 
 /* ---------------------------------------------------------- catalogue page */
 

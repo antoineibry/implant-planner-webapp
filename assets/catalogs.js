@@ -111,19 +111,24 @@
     return link;
   }
 
+  function render() {
+    grid.innerHTML = '';
+    App.catalogues.forEach(function (catalogue) {
+      grid.appendChild(card(catalogue));
+    });
+
+    var uncovered = [];
+    App.data().models.forEach(function (group) {
+      if (!App.catalogueFor(group.brand, group.model)) uncovered.push(group.brand + ' ' + group.model);
+    });
+
+    footnote.textContent = uncovered.length
+      ? 'No catalogue PDF is on file for: ' + uncovered.join(', ') +
+        '. Add the PDF to the Catalogues folder to make it available here.'
+      : 'Every model in the current catalogue data is covered by one of these PDFs.';
+  }
+
   App.initTheme();
-
-  App.catalogues.forEach(function (catalogue) {
-    grid.appendChild(card(catalogue));
-  });
-
-  var uncovered = [];
-  App.data().models.forEach(function (group) {
-    if (!App.catalogueFor(group.brand, group.model)) uncovered.push(group.brand + ' ' + group.model);
-  });
-
-  footnote.textContent = uncovered.length
-    ? 'No catalogue PDF is on file for: ' + uncovered.join(', ') +
-      '. Add the PDF to the Catalogues folder to make it available here.'
-    : 'Every model in the current catalogue data is covered by one of these PDFs.';
+  render();
+  App.load().then(render);
 })();
