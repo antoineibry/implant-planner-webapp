@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalogs &middot; Department of Periodontology</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='19' font-size='19'%3E%F0%9F%A6%B7%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar__brand">
+    <svg class="appbar__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 2.5 8.5 6h7L12 2.5Z"></path>
+      <path d="M9 6.5h6l-.7 8.2a2.3 2.3 0 0 1-2.3 2.1 2.3 2.3 0 0 1-2.3-2.1L9 6.5Z"></path>
+      <path d="M12 17v4.5"></path>
+      <path d="M6.5 21.5h11"></path>
+    </svg>
+    <div>
+      <div class="appbar__title">Implant Planner</div>
+      <div class="appbar__subtitle">Department of Periodontology</div>
+    </div>
+  </div>
+
+  <nav class="appbar__nav">
+    <a class="appbar__link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path>
+      </svg>
+      Implant Planner
+    </a>
+    <a class="appbar__link" href="catalogs.html" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10l2 2h6.5A1.5 1.5 0 0 1 20 7.5v11A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5Z"></path>
+      </svg>
+      Catalogs
+    </a>
+  </nav>
+
+  <button class="icon-button" data-theme-toggle type="button" title="Switch between light and dark" aria-label="Switch between light and dark">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"></path>
+    </svg>
+  </button>
+</header>
+
+<main class="page">
+  <div class="page-head">
+    <h1>Catalogs</h1>
+    <p>The manufacturer catalogues behind the planner. Selecting one opens the PDF in a new tab.</p>
+  </div>
+
+  <div class="catalogue-grid" id="catalogue-grid"></div>
+
+  <p class="footnote" id="catalogue-footnote"></p>
+</main>
+
+<script src="data/implants.js"></script>
+<script src="data/classes.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/catalogs.js"></script>
+</body>
+</html>

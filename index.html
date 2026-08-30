@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Implant Planner &middot; Department of Periodontology</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='19' font-size='19'%3E%F0%9F%A6%B7%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar__brand">
+    <svg class="appbar__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 2.5 8.5 6h7L12 2.5Z"></path>
+      <path d="M9 6.5h6l-.7 8.2a2.3 2.3 0 0 1-2.3 2.1 2.3 2.3 0 0 1-2.3-2.1L9 6.5Z"></path>
+      <path d="M12 17v4.5"></path>
+      <path d="M6.5 21.5h11"></path>
+    </svg>
+    <div>
+      <div class="appbar__title">Implant Planner</div>
+      <div class="appbar__subtitle">Department of Periodontology</div>
+    </div>
+  </div>
+
+  <nav class="appbar__nav">
+    <a class="appbar__link" href="index.html" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path>
+      </svg>
+      Implant Planner
+    </a>
+    <a class="appbar__link" href="catalogs.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10l2 2h6.5A1.5 1.5 0 0 1 20 7.5v11A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5Z"></path>
+      </svg>
+      Catalogs
+    </a>
+  </nav>
+
+  <button class="icon-button" data-theme-toggle type="button" title="Switch between light and dark" aria-label="Switch between light and dark">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"></path>
+    </svg>
+  </button>
+</header>
+
+<main class="page">
+  <div class="page-head">
+    <h1>Implant Planner</h1>
+    <p>Enter the measurements of the bone at the implant site. The planner returns every implant in the
+      catalogue that satisfies the department&rsquo;s diameter and length rules, graded on each rule separately.</p>
+  </div>
+
+  <div class="planner">
+    <!-- ------------------------------------------------ INPUT: bone ------ -->
+    <section class="card bone-card sticky-panel" aria-labelledby="bone-heading">
+      <div class="card__head">
+        <span class="tag tag--bone">Input</span>
+        <h2 id="bone-heading" style="margin-top:7px">Bone at the implant site</h2>
+        <p>Measurements taken in the mouth</p>
+      </div>
+      <div class="card__body">
+        <form id="bone-form" autocomplete="off">
+          <div class="field">
+            <label class="field__label" for="bone-diameter">Bone diameter (width)</label>
+            <div class="field__input">
+              <input type="number" id="bone-diameter" name="boneDiameter" step="0.1" min="0" max="30" inputmode="decimal" placeholder="0.0">
+              <span class="field__unit">mm</span>
+              <span class="stepper">
+                <button type="button" data-step="bone-diameter" data-delta="0.1" aria-label="Increase bone diameter">&#9650;</button>
+                <button type="button" data-step="bone-diameter" data-delta="-0.1" aria-label="Decrease bone diameter">&#9660;</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="bone-length">Bone length (height)</label>
+            <div class="field__input">
+              <input type="number" id="bone-length" name="boneLength" step="0.1" min="0" max="40" inputmode="decimal" placeholder="0.0">
+              <span class="field__unit">mm</span>
+              <span class="stepper">
+                <button type="button" data-step="bone-length" data-delta="0.1" aria-label="Increase bone length">&#9650;</button>
+                <button type="button" data-step="bone-length" data-delta="-0.1" aria-label="Decrease bone length">&#9660;</button>
+              </span>
+            </div>
+            <p class="field__hint">Results update as you type.</p>
+          </div>
+
+          <div class="field">
+            <span class="field__label">Class</span>
+            <div class="brand-filter" id="class-filter" role="group" aria-label="Filter by class"></div>
+            <p class="field__hint" id="class-hint"></p>
+          </div>
+
+          <div class="field">
+            <span class="field__label">Brands</span>
+            <div class="brand-filter" id="brand-filter" role="group" aria-label="Filter by brand"></div>
+          </div>
+
+          <div class="field">
+            <button class="button button--quiet button--small" type="button" id="clear-button">Clear measurements</button>
+          </div>
+        </form>
+      </div>
+      <div class="card__head" style="border-top:1px solid var(--border);border-bottom:0">
+        <button class="button button--block button--small" type="button" id="open-data-dialog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4v4h-4"></path>
+          </svg>
+          Update catalogue
+        </button>
+        <p id="data-summary" style="text-align:center"></p>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------- OUTPUT: implants ---- -->
+    <section aria-labelledby="results-heading">
+      <div class="results__head">
+        <span class="tag tag--implant">Output</span>
+        <h2 id="results-heading" class="results__count" aria-live="polite">
+          <span id="results-count">Enter the bone measurements</span>
+        </h2>
+        <span class="results__context" id="results-context"></span>
+      </div>
+      <div id="results"></div>
+    </section>
+  </div>
+
+  <details class="rules">
+    <summary>Selection rules used by the planner</summary>
+    <div class="rule-grid">
+      <div class="card">
+        <div class="card__head"><h2>Diameter</h2><p>Bone diameter &minus; implant diameter</p></div>
+        <div class="card__body">
+          <table class="rule-table">
+            <thead><tr><th>Difference</th><th style="text-align:right">Rating</th></tr></thead>
+            <tbody>
+              <tr><td class="formula">exactly 3.0 mm</td><td><span class="badge badge--optimal">Optimal</span></td></tr>
+              <tr><td class="formula">2.0 &ndash; 2.99 mm</td><td><span class="badge badge--standard">Standard</span></td></tr>
+              <tr><td class="formula">1.6 &ndash; 1.99 mm</td><td><span class="badge badge--less">Less preferable</span></td></tr>
+              <tr><td class="formula">anything else</td><td>not shown</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__head"><h2>Length</h2><p>Bone length &minus; implant length</p></div>
+        <div class="card__body">
+          <table class="rule-table">
+            <thead><tr><th>Difference</th><th style="text-align:right">Rating</th></tr></thead>
+            <tbody>
+              <tr><td class="formula">0 mm (equal)</td><td><span class="badge badge--optimal">Optimal</span></td></tr>
+              <tr><td class="formula">up to 2.0 mm shorter</td><td><span class="badge badge--standard">Standard</span></td></tr>
+              <tr><td class="formula">anything else</td><td>not shown</td></tr>
+            </tbody>
+          </table>
+          <p class="field__hint" style="margin-top:12px">An implant longer than the bone is never shown. Each result
+            is rated on diameter and on length separately; it is grouped under the weaker of its two ratings.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+</main>
+
+<!-- ------------------------------------------------------ update catalogue -->
+<dialog class="dialog" id="data-dialog" aria-labelledby="data-dialog-title">
+  <div class="dialog__head">
+    <h2 id="data-dialog-title">Update catalogue</h2>
+    <button class="icon-button" type="button" id="close-data-dialog" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="dialog__body">
+    <div class="data-status" id="data-status"></div>
+
+    <div class="drop-zone" id="drop-zone" role="button" tabindex="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 15V3"></path><path d="m7.5 7.5 4.5-4.5 4.5 4.5"></path>
+        <path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"></path>
+      </svg>
+      <strong>Choose your Excel file, or drop it here</strong>
+      <span>Implant catalogue &mdash; Brand Name &middot; Model &middot; Diameter (mm) &middot; Length (mm)</span>
+      <span>Classes &mdash; Brand Name &middot; Model &middot; Class</span>
+      <span>Either file is recognised automatically.</span>
+      <input type="file" id="file-input" accept=".xlsx" class="visually-hidden">
+    </div>
+
+    <div id="data-message"></div>
+  </div>
+
+  <div class="dialog__foot">
+    <button class="button button--small" type="button" id="reset-data">Restore built-in data</button>
+    <span class="dialog__downloads">
+      <button class="button button--small button--primary" type="button" data-download="implants" title="Save the catalogue in use as data/implants.js so it becomes the default for everyone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"></path><path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path><path d="M4 20h16"></path>
+        </svg>
+        implants.js
+      </button>
+      <button class="button button--small button--primary" type="button" data-download="classes" title="Save the classes in use as data/classes.js so they become the default for everyone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"></path><path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path><path d="M4 20h16"></path>
+        </svg>
+        classes.js
+      </button>
+    </span>
+  </div>
+</dialog>
+
+<script src="data/implants.js"></script>
+<script src="data/classes.js"></script>
+<script src="assets/xlsx.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/planner.js"></script>
+</body>
+</html>

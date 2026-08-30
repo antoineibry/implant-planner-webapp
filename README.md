@@ -4,7 +4,7 @@ A two-page web app for planning implants from the department's catalogues.
 
 - **Implant Planner** (`index.html`) — enter the bone diameter and bone length measured at the
   implant site; every implant in the catalogue that satisfies the department's rules is listed,
-  rated on diameter and on length separately.
+  rated on diameter and on length separately, and filterable by class and by brand.
 - **Catalogs** (`catalogs.html`) — one icon per manufacturer catalogue; selecting it opens the PDF
   in a new tab.
 
@@ -32,6 +32,9 @@ The whole app is static files. There is no server, no database engine and no bui
 An implant longer than the bone is never shown. Each result carries its own diameter rating and
 its own length rating, and is grouped under the weaker of the two.
 
+**Class and brand** are filters, not rules: with none selected the whole catalogue is searched.
+Selecting classes and brands together narrows to implants that satisfy both.
+
 ## The catalogue data
 
 `implant-catalogue.xlsx` is the master. Its four columns never change:
@@ -41,26 +44,36 @@ its own length rating, and is grouped under the weaker of the two.
 One row per available diameter/length combination. A brand can have any number of models; a model
 belongs to one brand.
 
-`data/implants.js` is the copy the web app actually reads — the same data, grouped by model so the
-browser can load it instantly. It currently holds 231 implant sizes across 14 models.
+`brand-classes.xlsx` holds the class of each brand or model, in three columns:
+
+    Brand Name | Model | Class
+
+A row whose model is `All models` (or blank, or `*`) applies to every model of that brand; a row
+naming one model overrides its brand's row for that model. A model no row covers is listed as
+`Unclassified` and still appears in results — it is simply grouped under that label in the filter.
+
+`data/implants.js` and `data/classes.js` are the copies the web app actually reads — the same data,
+grouped so the browser can load it instantly. They currently hold 231 implant sizes across 14
+models, in classes A and B.
 
 ### Updating the data
 
-1. Edit `implant-catalogue.xlsx` in Excel and save it.
+1. Edit `implant-catalogue.xlsx` or `brand-classes.xlsx` in Excel and save it.
 2. Open the Implant Planner and press **Update catalogue**.
 3. Choose the Excel file (or drop it on the panel).
 
-The planner reads the workbook in the browser and starts using it immediately. The file is checked
-first: if a row is missing a brand, a model or a number, nothing is replaced and the message names
-the spreadsheet row to fix.
+Either workbook is accepted: the planner recognises which one it is from the column headers and
+replaces only that part of the data. It reads the workbook in the browser and starts using it
+immediately. The file is checked first: if a row is missing a brand, a model, a class or a number,
+nothing is replaced and the message names the spreadsheet row to fix.
 
 That update lives in the browser that made it. To make it the default **for everyone**:
 
-4. In the same dialog, press **Download data file**.
-5. Put the downloaded `implants.js` into the website's `data` folder, replacing the old one, and
-   re-upload the site.
+4. In the same dialog, press **implants.js** or **classes.js** under Download.
+5. Put the downloaded file into the website's `data` folder, replacing the old one, and re-upload
+   the site.
 
-**Restore built-in catalogue** discards a browser's uploaded copy and returns to `data/implants.js`.
+**Restore built-in data** discards a browser's uploaded copies and returns to the files in `data`.
 
 ## Adding a catalogue PDF
 
@@ -88,6 +101,8 @@ Firefox or Safari from 2023 or later. Everything else in the app works in any mo
     assets/catalogs.js      Catalogs page behaviour
     assets/xlsx.js          Reads .xlsx files in the browser, no external library
     data/implants.js        The catalogue the app reads
-    implant-catalogue.xlsx  The master spreadsheet
+    data/classes.js         The class of each brand or model
+    implant-catalogue.xlsx  The master catalogue spreadsheet
+    brand-classes.xlsx      The master class spreadsheet
     Catalogues/             Manufacturer catalogue PDFs
 "# implant-planner-webapp" 
