@@ -222,13 +222,13 @@
     notice.appendChild(element('h3', null, 'No implant in the catalogue fits these measurements'));
     notice.appendChild(element('p', null,
       'For a bone diameter of ' + App.mm(boneDiameter) + ' mm and a bone length of ' +
-      App.mm(boneLength) + ' mm, an implant has to fall inside both of these ranges:'));
+      App.mm(boneLength) + ' mm, an implant has to meet both of these:'));
 
     var list = element('ul');
     var diameterItem = element('li');
     diameterItem.appendChild(element('strong', null, 'Diameter: '));
     diameterItem.appendChild(document.createTextNode(
-      App.mm(windows.diameter[0]) + ' mm to ' + App.mm(windows.diameter[1]) + ' mm'));
+      App.mm(windows.diameterMax) + ' mm or narrower'));
     list.appendChild(diameterItem);
 
     var lengthItem = element('li');

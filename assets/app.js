@@ -22,7 +22,22 @@
 
   /* --------------------------------------------------------- catalogue PDFs */
 
+  /* Listed in the order the Catalogs page shows them. The first entry whose
+     `matches` accepts a model is the catalogue for that model, so a rule for
+     one model must come before its brand's general rule. */
   var CATALOGUES = [
+    {
+      file: 'Biohorizons Tapered Pro Conical.pdf',
+      title: 'Tapered Pro & Tapered Pro Conical',
+      brand: 'Biohorizons',
+      matches: function (brand) { return /biohorizons/i.test(brand); }
+    },
+    {
+      file: 'JD Evolution Plus.pdf',
+      title: 'JDEvolution Plus',
+      brand: 'JD Evolution',
+      matches: function (brand, model) { return /jd\s*evolution/i.test(brand) || /jdevolution/i.test(model); }
+    },
     {
       file: 'Megagen Anyridge.pdf',
       title: 'AnyRidge',
@@ -34,6 +49,12 @@
       title: 'Blue Diamond',
       brand: 'MegaGen',
       matches: function (brand, model) { return /blue\s*diamond/i.test(model); }
+    },
+    {
+      file: 'Nobel Biocare Replace CC.pdf',
+      title: 'NobelReplace Conical Connection',
+      brand: 'Nobel Biocare',
+      matches: function (brand, model) { return /nobel/i.test(brand) && /replace/i.test(model); }
     },
     {
       file: 'Omnitaper.pdf',
@@ -364,19 +385,19 @@
     /* ------------------------------------------------------------- matching */
 
     /* Diameter: bone diameter minus implant diameter.
-         exactly 3.0 mm  -> optimal
+         3.0 mm or more  -> optimal
          2.0 to 2.99 mm  -> standard
          1.6 to 1.99 mm  -> less preferable
-         anything else   -> excluded
+         under 1.6 mm    -> excluded
        Length: bone length minus implant length.
          0 mm            -> optimal
          up to 2.0 mm    -> standard
          anything else   -> excluded */
     gradeDiameter: function (boneDiameter, implantDiameter) {
       var gap = round(boneDiameter - implantDiameter, 2);
-      if (gap === 3) return { grade: 'optimal', gap: gap };
-      if (gap >= 2 && gap < 3) return { grade: 'standard', gap: gap };
-      if (gap >= 1.6 && gap < 2) return { grade: 'less', gap: gap };
+      if (gap >= 3) return { grade: 'optimal', gap: gap };
+      if (gap >= 2) return { grade: 'standard', gap: gap };
+      if (gap >= 1.6) return { grade: 'less', gap: gap };
       return null;
     },
 
@@ -440,11 +461,12 @@
       return results;
     },
 
-    /* The diameter and length windows that can produce any result at all,
-       used to explain a search that returns nothing. */
+    /* The diameter and length an implant has to stay within to appear at all,
+       used to explain a search that returns nothing. Any diameter at least
+       1.6 mm under the bone qualifies, so only the upper bound is fixed. */
     windows: function (boneDiameter, boneLength) {
       return {
-        diameter: [round(boneDiameter - 3, 2), round(boneDiameter - 1.6, 2)],
+        diameterMax: round(boneDiameter - 1.6, 2),
         length: [round(boneLength - 2, 2), round(boneLength, 2)]
       };
     }

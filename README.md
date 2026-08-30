@@ -16,10 +16,10 @@ The whole app is static files. There is no server, no database engine and no bui
 
 | Difference | Rating |
 | --- | --- |
-| exactly 3.0 mm | Optimal |
+| 3.0 mm or more | Optimal |
 | 2.0 – 2.99 mm | Standard |
 | 1.6 – 1.99 mm | Less preferable |
-| anything else | not shown |
+| under 1.6 mm | not shown |
 
 **Length** — bone length minus implant length:
 
